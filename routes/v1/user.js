@@ -1,9 +1,8 @@
 const express = require("express");
-const { StatusCodes } = require("http-status-codes");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.status(StatusCodes.OK).json({
+  res.json({
     success: true,
     message: "API is working!",
     data: {},
@@ -11,7 +10,6 @@ router.get("/", (req, res) => {
   });
 });
 
-router.use("/admin", require("./admin"));
-router.use("/user", require("./user"));
+router.post("/register", createUser);
 
 module.exports = router;
