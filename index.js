@@ -1,8 +1,20 @@
 const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const { ServerConfig } = require("./configs");
 const { StatusCodes } = require("http-status-codes");
 
 const app = express();
+
+const corsOptions = {
+  origin: ["http://localhost:5173", "http://localhost:5174"],
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.status(StatusCodes.OK).json({
