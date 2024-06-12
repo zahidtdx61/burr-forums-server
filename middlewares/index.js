@@ -31,7 +31,32 @@ const createJWT = (req, res, next) => {
   next();
 };
 
+const verifyJWT = (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    console.log("No token found");
+    return res.status(StatusCodes.UNAUTHORIZED).send({
+      status: "error",
+      message: "Unauthorized",
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, SecretsConfig.JWT_SECRET);
+    req.body.uid = decoded.uid;
+
+    next();
+  } catch (error) {
+    return res.status(StatusCodes.UNAUTHORIZED).send({
+      status: "error",
+      message: "Unauthorized",
+    });
+  }
+};
+
 module.exports = {
   validateUserData,
   createJWT,
+  verifyJWT,
 }
