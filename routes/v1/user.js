@@ -12,6 +12,9 @@ router.get("/", (req, res) => {
   });
 });
 
+
 router.post("/register", validateUserData, UserController.createUser);
+router.get("/find/:id", UserController.getUser);
+router.post("/add-post", UserController.addPost);
 
 module.exports = router;
