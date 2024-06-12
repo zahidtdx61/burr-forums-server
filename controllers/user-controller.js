@@ -5,24 +5,39 @@ const Post = require("../models/post");
 const createUser = async (req, res) => {
   const user = req.body;
 
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  };
+
   try {
     const existingUser = await User.findOne({ uid: user?.uid });
+    const { token } = req.body;
+
     if (existingUser) {
-      return res.status(StatusCodes.CONFLICT).json({
-        success: false,
-        message: "User already exists",
-        data: {},
-        error: {},
-      });
+      return res
+        .cookie("token", token, cookieOptions)
+        .status(StatusCodes.OK)
+        .json({
+          success: true,
+          message: "User tokenized successfully",
+          data: {},
+          error: {},
+        });
     }
 
     const newUser = await User.create(user);
-    return res.status(StatusCodes.CREATED).json({
-      success: true,
-      message: "User created successfully",
-      data: newUser,
-      error: {},
-    });
+    return res
+      .cookie("token", token, cookieOptions)
+      .status(StatusCodes.CREATED)
+      .json({
+        success: true,
+        message: "User created successfully",
+        data: newUser,
+        error: {},
+      });
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,

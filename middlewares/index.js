@@ -23,15 +23,13 @@ const validateUserData = (req, res, next) => {
 };
 
 const createJWT = (req, res, next) => {
-  const createJWT = (req, res, next) => {
-    const { uid } = req.body;
-    const token = jwt.sign({ uid }, SecretsConfig.JWT_SECRET, {
-      expiresIn: "365d",
-    });
-    req.body.token = token;
-    next();
-  };
-}
+  const { uid } = req.body;
+  const token = jwt.sign({ uid }, SecretsConfig.JWT_SECRET, {
+    expiresIn: "365d",
+  });
+  req.body.token = token;
+  next();
+};
 
 module.exports = {
   validateUserData,

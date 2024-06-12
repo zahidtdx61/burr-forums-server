@@ -1,6 +1,6 @@
 const express = require("express");
 const { UserController } = require("../../controllers");
-const { validateUserData } = require("../../middlewares");
+const { validateUserData, createJWT } = require("../../middlewares");
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
 });
 
 
-router.post("/register", validateUserData, UserController.createUser);
+router.post("/register", validateUserData, createJWT, UserController.createUser);
 router.get("/find/:id", UserController.getUser);
 router.post("/add-post", UserController.addPost);
 
