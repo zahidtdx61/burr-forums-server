@@ -16,14 +16,14 @@ const createUser = async (req, res) => {
     }
 
     const newUser = await User.create(user);
-    res.status(StatusCodes.CREATED).json({
+    return res.status(StatusCodes.CREATED).json({
       success: true,
       message: "User created successfully",
       data: newUser,
       error: {},
     });
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: "User not created",
       data: {},
@@ -32,7 +32,37 @@ const createUser = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findOne({ uid: id });
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "User not found",
+        data: {},
+        error: {},
+      });
+    }
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "User found",
+      data: user,
+      error: {},
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "User not found",
+      data: {},
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   createUser,
-}
+  getUser,
+};
