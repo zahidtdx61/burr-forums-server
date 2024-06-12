@@ -66,7 +66,6 @@ const getUser = async (req, res) => {
 const addPost = async (req, res) => {
   const { uid } = req.body;
   const content = req.body;
-  console.log({ uid, content });
 
   try {
     const user = await User.findOne({ uid: uid });
