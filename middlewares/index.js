@@ -1,5 +1,7 @@
 const zod = require("zod");
+const jwt = require("jsonwebtoken");
 const { StatusCodes } = require("http-status-codes");
+const { SecretsConfig } = require("../configs");
 
 const validateUserData = (req, res, next) => {
   const schema = zod.object({
@@ -59,4 +61,4 @@ module.exports = {
   validateUserData,
   createJWT,
   verifyJWT,
-}
+};

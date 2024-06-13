@@ -14,6 +14,7 @@ router.get("/", (req, res) => {
 
 
 router.post("/register", validateUserData, createJWT, UserController.createUser);
+router.get("/logout", UserController.logout);
 router.get("/find", verifyJWT, UserController.getUser);
 router.post("/add-post", verifyJWT, UserController.addPost);
 

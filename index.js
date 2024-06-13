@@ -7,13 +7,18 @@ const { StatusCodes } = require("http-status-codes");
 const app = express();
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://localhost:5174"],
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://buzz-forums.web.app",
+    "https://buzz-forums.vercel.app",
+  ],
   credentials: true,
   optionSuccessStatus: 200,
 };
 
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cors());
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
