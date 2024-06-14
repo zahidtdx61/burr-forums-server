@@ -161,10 +161,61 @@ const getPosts = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findOne({ uid: req.body.uid });
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "User not found",
+        data: {},
+        error: {},
+      });
+    }
+
+    const post = await Post.findOne({ _id: id });
+    if (!post) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Post not found",
+        data: {},
+        error: {},
+      });
+    }
+
+    if (post.userId !== user._id) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        message: "You are not authorized to delete this post",
+        data: {},
+        error: {},
+      });
+    }
+
+    await Post.deleteOne({ _id: id });
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Post deleted successfully",
+      data: {},
+      error: {},
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Post not found",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   getUser,
   addPost,
   getPosts,
+  deletePost,
   logout,
 };

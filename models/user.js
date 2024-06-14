@@ -24,6 +24,11 @@ const userSchema = new Mongoose.Schema({
     required: true,
     default: "active",
   },
+  badge: {
+    type: String,
+    required: true,
+    default: "bronze",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
