@@ -130,9 +130,41 @@ const logout = async (req, res) => {
     });
 };
 
+const getPosts = async (req, res) => {
+  const { uid } = req.body;
+
+  try {
+    const user = await User.findOne({ uid: uid });
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "User not found",
+        data: {},
+        error: {},
+      });
+    }
+
+    const posts = await Post.find({ userId: user._id });
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Posts found",
+      data: posts,
+      error: {},
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Posts not found",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   getUser,
   addPost,
+  getPosts,
   logout,
 };
