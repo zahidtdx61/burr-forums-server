@@ -17,7 +17,7 @@ router.post("/register", validateUserData, createJWT, UserController.createUser)
 router.get("/logout", UserController.logout);
 router.get("/find/:id", verifyJWT, UserController.getUser);
 router.post("/add-post", verifyJWT, UserController.addPost);
-router.post("/delete-post/:id", verifyJWT, UserController.deletePost);
+router.delete("/delete-post/:id", verifyJWT, UserController.deletePost);
 router.get("/get-posts", verifyJWT, UserController.getPosts);
 
 module.exports = router;

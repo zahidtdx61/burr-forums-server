@@ -185,7 +185,8 @@ const deletePost = async (req, res) => {
       });
     }
 
-    if (post.userId !== user._id) {
+    if (!post.userId.equals(user._id)) {
+      // console.log({ id, "post.userId": post.userId, "user._id": user._id });
       return res.status(StatusCodes.UNAUTHORIZED).json({
         success: false,
         message: "You are not authorized to delete this post",
@@ -194,7 +195,7 @@ const deletePost = async (req, res) => {
       });
     }
 
-    await Post.deleteOne({ _id: id });
+    await Post.findByIdAndDelete(id);
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Post deleted successfully",
@@ -202,6 +203,7 @@ const deletePost = async (req, res) => {
       error: {},
     });
   } catch (error) {
+    console.log(error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: "Post not found",
