@@ -95,8 +95,39 @@ const logout = async (req, res) => {
     });
 };
 
+const getRole = async (req, res) => {
+  const { uid } = req.body;
+  try {
+    const user = await User.findOne({ uid: uid });
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "User not found",
+        data: {},
+        error: {},
+      });
+    }
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "User found",
+      data: user.role,
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "User not found",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   getUser,
+  getRole,
   logout,
 };

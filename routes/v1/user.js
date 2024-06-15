@@ -12,10 +12,13 @@ router.get("/", (req, res) => {
   });
 });
 
-
+// user related routes
 router.post("/register", validateUserData, createJWT, UserController.createUser);
 router.get("/logout", UserController.logout);
 router.get("/find/:id", verifyJWT, UserController.getUser);
+router.get("/role", verifyJWT, UserController.getRole);
+
+// post related routes
 router.post("/add-post", verifyJWT, PostController.addPost);
 router.get("/get-posts", verifyJWT, PostController.getPosts);
 router.post("/add-comment/:id", verifyJWT, PostController.addComment);
