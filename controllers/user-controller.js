@@ -1,7 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
 const User = require("../models/user");
-const Post = require("../models/post");
-const Comment = require("../models/comment");
 
 const createUser = async (req, res) => {
   const user = req.body;
