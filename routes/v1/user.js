@@ -1,5 +1,5 @@
 const express = require("express");
-const { UserController } = require("../../controllers");
+const { UserController, PostController } = require("../../controllers");
 const { validateUserData, createJWT, verifyJWT } = require("../../middlewares");
 const router = express.Router();
 
@@ -16,9 +16,9 @@ router.get("/", (req, res) => {
 router.post("/register", validateUserData, createJWT, UserController.createUser);
 router.get("/logout", UserController.logout);
 router.get("/find/:id", verifyJWT, UserController.getUser);
-router.post("/add-post", verifyJWT, UserController.addPost);
-router.get("/get-posts", verifyJWT, UserController.getPosts);
-router.post("/add-comment/:id", verifyJWT, UserController.addComment);
-router.delete("/delete-post/:id", verifyJWT, UserController.deletePost);
+router.post("/add-post", verifyJWT, PostController.addPost);
+router.get("/get-posts", verifyJWT, PostController.getPosts);
+router.post("/add-comment/:id", verifyJWT, PostController.addComment);
+router.delete("/delete-post/:id", verifyJWT, PostController.deletePost);
 
 module.exports = router;
