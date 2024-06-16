@@ -41,6 +41,7 @@ const addPost = async (req, res) => {
 
 const getPosts = async (req, res) => {
   const { uid } = req.body;
+  const { search, sorted, page, size, status } = req.query;
 
   try {
     const user = await User.findOne({ uid: uid });
@@ -53,7 +54,27 @@ const getPosts = async (req, res) => {
       });
     }
 
-    const posts = await Post.find({ userId: user._id });
+    let query = {};
+    if (search) {
+      query = { title: { $regex: new RegExp(search, "i") } };
+    }
+    if (status) {
+      query = { ...query, status };
+    }
+
+    let postQuery = Post.find(query);
+    if (sorted) {
+      postQuery = postQuery.sort({ [sorted]: -1 });
+    }
+
+    const limit = parseInt(size);
+    const skip = (parseInt(page) - 1) * limit;
+
+    // console.log({ limit, skip })
+    postQuery = postQuery.skip(skip).limit(limit);
+
+    const posts = await postQuery.exec();
+    
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Posts found",
