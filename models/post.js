@@ -25,6 +25,10 @@ const postSchema = new Mongoose.Schema({
     type: Number,
     default: 0,
   },
+  tag: {
+    type: String,
+    required: true,
+  },
   userId: {
     type: Mongoose.Schema.Types.ObjectId,
     ref: "User",
