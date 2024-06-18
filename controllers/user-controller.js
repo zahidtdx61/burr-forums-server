@@ -109,7 +109,7 @@ const getRole = async (req, res) => {
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "User found",
-      data: user.role,
+      data: user,
       error: {},
     });
   } catch (error) {
