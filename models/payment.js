@@ -4,6 +4,7 @@ const paymentSchema = new Mongoose.Schema({
   transactionId: {
     type: String,
     required: true,
+    unique: true,
   },
   userId: {
     type: Mongoose.Schema.Types.ObjectId,
