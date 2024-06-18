@@ -18,7 +18,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.static("public"));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -35,6 +34,7 @@ app.use("/api", require("./routes"));
 
 // global catch-all route
 app.use((req, res) => {
+  console.log(req.url);
   res.status(StatusCodes.NOT_FOUND).json({
     success: false,
     message: "Route not found!",
