@@ -10,7 +10,7 @@ const paymentSchema = new Mongoose.Schema({
     required: true,
     ref: "User",
   },
-  paidAT: {
+  paidAt: {
     type: Date,
     default: Date.now,
   },

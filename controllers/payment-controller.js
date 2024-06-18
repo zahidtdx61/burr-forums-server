@@ -28,6 +28,53 @@ const createCheckoutSession = async (req, res) => {
   });
 };
 
+const completePayment = async (req, res) => {
+  const session = await Mongoose.startSession();
+
+  session.startTransaction();
+  const { transactionId, uid } = req.body;
+
+  try {
+    const user = await User.findOne({ uid }).session(session);
+    if (!user) {
+      await session.abortTransaction();
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "User not found",
+        data: {},
+        error: {},
+      });
+    }
+
+    const payment = await Payment.create({
+      transactionId,
+      userId: user._id,
+    }).session(session);
+
+    const userUpdate = await User.updateOne(
+      { _id: user._id },
+      { badge: "gold" }
+    ).session(session);
+
+    await session.commitTransaction();
+
+    return res.status(StatusCodes.CREATED).json({
+      success: true,
+      message: "Payment completed successfully",
+      data: payment,
+      error: {},
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Payment not completed",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createCheckoutSession,
+  completePayment,
 };
