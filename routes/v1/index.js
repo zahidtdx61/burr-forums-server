@@ -13,5 +13,6 @@ router.get("/", (req, res) => {
 
 router.use("/admin", require("./admin"));
 router.use("/user", require("./user"));
+router.use("/payment", require("./payment"));
 
 module.exports = router;
