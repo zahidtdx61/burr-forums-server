@@ -74,7 +74,7 @@ const getPosts = async (req, res) => {
     postQuery = postQuery.skip(skip).limit(limit);
 
     const posts = await postQuery.exec();
-    
+
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Posts found",
@@ -196,9 +196,31 @@ const addComment = async (req, res) => {
   }
 };
 
+const getComments = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const comments = await Comment.find({ postId: id });
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Comments found",
+      data: comments,
+      error: {},
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Comments not found",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   addPost,
   getPosts,
   deletePost,
   addComment,
+  getComments,
 };

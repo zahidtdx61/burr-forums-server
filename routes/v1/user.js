@@ -24,4 +24,7 @@ router.get("/get-posts", verifyJWT, PostController.getPosts);
 router.post("/add-comment/:id", verifyJWT, PostController.addComment);
 router.delete("/delete-post/:id", verifyJWT, PostController.deletePost);
 
+// comments
+router.get("/comments/:id", verifyJWT, PostController.getComments);
+
 module.exports = router;
