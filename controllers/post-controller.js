@@ -200,9 +200,8 @@ const getComments = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const comments = await Comment.find({ postId: id })
-      .populate("postId")
-      .populate("userId");
+    const comments = await Post.findById(id).populate("comments").populate("userId").exec();
+
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Comments found",
