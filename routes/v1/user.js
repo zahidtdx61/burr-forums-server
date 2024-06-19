@@ -13,7 +13,12 @@ router.get("/", (req, res) => {
 });
 
 // user related routes
-router.post("/register", validateUserData, createJWT, UserController.createUser);
+router.post(
+  "/register",
+  validateUserData,
+  createJWT,
+  UserController.createUser
+);
 router.get("/logout", UserController.logout);
 router.get("/find/:id", verifyJWT, UserController.getUser);
 router.get("/role", verifyJWT, UserController.getRole);
@@ -28,6 +33,5 @@ router.get("/post-count", verifyJWT, PostController.postCounter);
 // comments
 router.get("/comments/:id", verifyJWT, PostController.getComments);
 router.post("/comment/report/:id", verifyJWT, PostController.reportComment);
-router.get("/reported-comments", verifyJWT, PostController.getReportedComments);
 
 module.exports = router;

@@ -275,7 +275,9 @@ const reportComment = async (req, res) => {
 
 const getReportedComments = async (req, res) => {
   try {
-    const comments = await Comment.find({ status: "reported" }).populate("userId");
+    const comments = await Comment.find({ status: "reported" }).populate(
+      "userId"
+    );
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Reported comments found",
@@ -291,7 +293,29 @@ const getReportedComments = async (req, res) => {
       error: error.message,
     });
   }
-}
+};
+
+const deleteComment = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Comment.findByIdAndDelete(id);
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Comment deleted successfully",
+      data: {},
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Comment not deleted",
+      data: {},
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   addPost,
@@ -302,4 +326,5 @@ module.exports = {
   reportComment,
   postCounter,
   getReportedComments,
+  deleteComment,
 };
