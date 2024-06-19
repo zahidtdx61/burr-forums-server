@@ -40,11 +40,11 @@ const addPost = async (req, res) => {
 };
 
 const getPosts = async (req, res) => {
-  const { uid } = req.body;
-  const { search, sorted, page, size, status } = req.query;
+  const { search, sorted, page, size, status, id } = req.query;
+  console.log({ search, sorted, page, size, status, id });
 
   try {
-    const user = await User.findOne({ uid: uid });
+    const user = await User.findOne({ uid: id });
     if (!user) {
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
@@ -222,10 +222,84 @@ const getComments = async (req, res) => {
   }
 };
 
+const postCounter = async (req, res) => {
+  const { uid } = req.body;
+  const { sorted } = req.query;
+
+  try {
+    const user = await User.findOne({ uid });
+    const posts = await Post.find({ userId: user._id }).sort({ [sorted]: -1 });
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Post count",
+      data: posts,
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Post count not found",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
+const reportComment = async (req, res) => {
+  const { id } = req.params;
+  const { feedback } = req.body;
+
+  try {
+    const comment = await Comment.findByIdAndUpdate(id, {
+      status: "reported",
+      feedback,
+    });
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Comment reported",
+      data: comment,
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Comment not reported",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
+const getReportedComments = async (req, res) => {
+  try {
+    const comments = await Comment.find({ status: "reported" }).populate("userId");
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Reported comments found",
+      data: comments,
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Reported comments not found",
+      data: {},
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   addPost,
   getPosts,
   deletePost,
   addComment,
   getComments,
+  reportComment,
+  postCounter,
+  getReportedComments,
 };

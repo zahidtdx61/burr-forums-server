@@ -23,8 +23,11 @@ router.post("/add-post", verifyJWT, PostController.addPost);
 router.get("/get-posts", verifyJWT, PostController.getPosts);
 router.post("/add-comment/:id", verifyJWT, PostController.addComment);
 router.delete("/delete-post/:id", verifyJWT, PostController.deletePost);
+router.get("/post-count", verifyJWT, PostController.postCounter);
 
 // comments
 router.get("/comments/:id", verifyJWT, PostController.getComments);
+router.post("/comment/report/:id", verifyJWT, PostController.reportComment);
+router.get("/reported-comments", verifyJWT, PostController.getReportedComments);
 
 module.exports = router;
