@@ -7,5 +7,6 @@ router.post("/add-announcement", verifyJWT, verifyAdmin, AdminController.addAnno
 router.get("/reported-comments", verifyJWT, verifyAdmin, PostController.getReportedComments);
 router.post("/add-tag", verifyJWT, verifyAdmin, AdminController.addTag);
 router.delete("/delete-comment/:id", verifyJWT, verifyAdmin, PostController.deleteComment);
+router.get("/all-users-data", verifyJWT, verifyAdmin, AdminController.getAllUsers);
 
 module.exports = router;
