@@ -9,5 +9,6 @@ router.post("/add-tag", verifyJWT, verifyAdmin, AdminController.addTag);
 router.delete("/delete-comment/:id", verifyJWT, verifyAdmin, PostController.deleteComment);
 router.get("/all-users-data", verifyJWT, verifyAdmin, AdminController.getAllUsersData);
 router.get("/all-users", verifyJWT, AdminController.getAllUsers);
+router.patch("/change-role/:id", verifyJWT, verifyAdmin, AdminController.changeRole);
 
 module.exports = router;

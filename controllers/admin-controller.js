@@ -103,9 +103,32 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const changeRole = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findByIdAndUpdate(id, { role: "admin" });
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Role changed to Admin",
+      data: user,
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Role not changed",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   addAnnouncement,
   addTag,
   getAllUsersData,
   getAllUsers,
+  changeRole,
 };
