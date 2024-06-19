@@ -26,6 +26,7 @@ router.get("/role", verifyJWT, UserController.getRole);
 // post related routes
 router.post("/add-post", verifyJWT, PostController.addPost);
 router.get("/get-posts", verifyJWT, PostController.getPosts);
+router.get("/get-post/:id", verifyJWT, PostController.getPost);
 router.post("/add-comment/:id", verifyJWT, PostController.addComment);
 router.delete("/delete-post/:id", verifyJWT, PostController.deletePost);
 router.get("/post-count", verifyJWT, PostController.postCounter);

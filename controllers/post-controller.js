@@ -3,6 +3,7 @@ const User = require("../models/user");
 const Post = require("../models/post");
 const Comment = require("../models/comment");
 const Tag = require("../models/tag");
+const { get } = require("mongoose");
 
 const addPost = async (req, res) => {
   const { uid } = req.body;
@@ -34,6 +35,27 @@ const addPost = async (req, res) => {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: "Post not created",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
+const getPost = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const post = await Post.findById(id);
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Post found",
+      data: post,
+      error: {},
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Post not found",
       data: {},
       error: error.message,
     });
@@ -340,10 +362,11 @@ const getTags = async (req, res) => {
       error: error.message,
     });
   }
-}
+};
 
 module.exports = {
   addPost,
+  getPost,
   getPosts,
   deletePost,
   addComment,
