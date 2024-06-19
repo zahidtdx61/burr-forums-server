@@ -299,7 +299,11 @@ const deleteComment = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await Comment.findByIdAndDelete(id);
+    const comment = await Comment.findByIdAndDelete(id);
+    const post = await Post.findByIdAndUpdate(comment.postId, {
+      $pull: { comments: id },
+    });
+    // console.log(comment, post);
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Comment deleted successfully",
