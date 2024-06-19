@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const User = require("../models/user");
 const Post = require("../models/post");
 const Comment = require("../models/comment");
+const Tag = require("../models/tag");
 
 const addPost = async (req, res) => {
   const { uid } = req.body;
@@ -321,6 +322,26 @@ const deleteComment = async (req, res) => {
   }
 };
 
+const getTags = async (req, res) => {
+  try {
+    const tags = await Tag.find({});
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Tags found",
+      data: tags,
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Tags not found",
+      data: {},
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   addPost,
   getPosts,
@@ -331,4 +352,5 @@ module.exports = {
   postCounter,
   getReportedComments,
   deleteComment,
+  getTags,
 };
