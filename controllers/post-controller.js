@@ -200,15 +200,19 @@ const getComments = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const comments = await Post.findById(id).populate("comments").populate("userId").exec();
+    const comments = await Comment.find({ postId: id }).populate("userId");
+    const post = await Post.findById(id).populate("userId");
+
+    post.comments = comments;
 
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Comments found",
-      data: comments,
+      data: post,
       error: {},
     });
   } catch (error) {
+    console.log(error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: "Comments not found",
