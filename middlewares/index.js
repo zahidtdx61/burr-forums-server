@@ -2,6 +2,7 @@ const zod = require("zod");
 const jwt = require("jsonwebtoken");
 const { StatusCodes } = require("http-status-codes");
 const { SecretsConfig } = require("../configs");
+const User = require("../models/user");
 
 const validateUserData = (req, res, next) => {
   const schema = zod.object({
@@ -57,8 +58,36 @@ const verifyJWT = (req, res, next) => {
   }
 };
 
+const verifyAdmin = async (req, res, next) => {
+  const { uid } = req.body;
+  try {
+    const user = await User.findOne({ uid: uid });
+    if (!user || user.role !== "admin") {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        message: "User not authorized",
+        data: {},
+        error: {},
+      });
+    }
+
+    req.body.user = user;
+
+    next();
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "User not found",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   validateUserData,
   createJWT,
   verifyJWT,
+  verifyAdmin,
 };

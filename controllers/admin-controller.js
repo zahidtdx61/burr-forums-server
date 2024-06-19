@@ -3,18 +3,8 @@ const User = require("../models/user");
 const Announcement = require("../models/announcement");
 
 const addAnnouncement = async (req, res) => {
-  const { title, description, uid } = req.body;
+  const { title, description, user } = req.body;
   try {
-    const user = await User.findOne({ uid: uid });
-    if (!user || user.role !== "admin") {
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        success: false,
-        message: "User not authorized",
-        data: {},
-        error: {},
-      });
-    }
-    const { title, description } = req.body;
     const announcement = await Announcement.create({
       title,
       description,
