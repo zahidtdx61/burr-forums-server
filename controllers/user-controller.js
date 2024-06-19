@@ -16,13 +16,14 @@ const createUser = async (req, res) => {
     const { token } = req.body;
 
     if (existingUser) {
+      const updatedUser = await User.findByIdAndUpdate(existingUser._id, user);
       return res
         .cookie("token", token, cookieOptions)
         .status(StatusCodes.OK)
         .json({
           success: true,
           message: "User tokenized successfully",
-          data: {},
+          data: updatedUser,
           error: {},
         });
     }

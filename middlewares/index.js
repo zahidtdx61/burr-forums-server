@@ -9,6 +9,7 @@ const validateUserData = (req, res, next) => {
     name: zod.string().min(1),
     email: zod.string().email(),
     uid: zod.string().min(1),
+    image: zod.string().min(1),
   });
 
   try {
