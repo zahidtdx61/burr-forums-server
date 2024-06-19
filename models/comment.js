@@ -24,6 +24,10 @@ const commentSchema = new Mongoose.Schema({
     required: true,
     default: "active",
   },
+  feedback:{
+    type: String,
+    default: ""
+  }
 });
 
 const Comment = Mongoose.model("Comment", commentSchema);
