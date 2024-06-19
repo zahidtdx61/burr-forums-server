@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
-const User = require("../models/user");
 const Announcement = require("../models/announcement");
+const Tag = require("../models/tag");
 
 const addAnnouncement = async (req, res) => {
   const { title, description, user } = req.body;
@@ -28,6 +28,33 @@ const addAnnouncement = async (req, res) => {
   }
 };
 
+const addTag = async (req, res) => {
+  const { value, label } = req.body;
+
+  try {
+    const tag = await Tag.create({
+      value,
+      label,
+    });
+
+    return res.status(StatusCodes.CREATED).json({
+      success: true,
+      message: "Tag created successfully",
+      data: tag,
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Tag not created",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   addAnnouncement,
+  addTag,
 };

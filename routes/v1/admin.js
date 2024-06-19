@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post("/add-announcement", verifyJWT, verifyAdmin, AdminController.addAnnouncement);
 router.get("/reported-comments", verifyJWT, verifyAdmin, PostController.getReportedComments);
+router.post("/add-tag", verifyJWT, verifyAdmin, AdminController.addTag);
 router.delete("/delete-comment/:id", verifyJWT, verifyAdmin, PostController.deleteComment);
 
 module.exports = router;
