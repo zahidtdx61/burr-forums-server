@@ -30,6 +30,7 @@ router.get("/get-post/:id", verifyJWT, PostController.getPost);
 router.post("/add-comment/:id", verifyJWT, PostController.addComment);
 router.delete("/delete-post/:id", verifyJWT, PostController.deletePost);
 router.get("/post-count", verifyJWT, PostController.postCounter);
+router.post("/vote/:id", verifyJWT, PostController.vote);
 
 // comments
 router.get("/comments/:id", verifyJWT, PostController.getComments);

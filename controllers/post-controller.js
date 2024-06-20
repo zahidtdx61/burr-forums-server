@@ -364,6 +364,48 @@ const getTags = async (req, res) => {
   }
 };
 
+const vote = async (req, res) => {
+  const { id } = req.params;
+  const { uid, vote } = req.body;
+
+  try {
+    let post;
+    if (vote === "up") {
+      post = await Post.findByIdAndUpdate(id, {
+        $inc: { upVotes: 1 },
+      });
+    } else {
+      post = await Post.findByIdAndUpdate(id, {
+        $inc: { downVotes: 1 },
+      });
+    }
+
+    if (!post) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: "Post not found",
+        data: {},
+        error: {},
+      });
+    }
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Vote registered",
+      data: post,
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Vote not registered",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   addPost,
   getPost,
@@ -376,4 +418,5 @@ module.exports = {
   getReportedComments,
   deleteComment,
   getTags,
+  vote,
 };
