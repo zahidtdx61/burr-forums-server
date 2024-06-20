@@ -25,6 +25,7 @@ router.get("/role", verifyJWT, UserController.getRole);
 
 // post related routes
 router.post("/add-post", verifyJWT, PostController.addPost);
+router.get("/my-posts", verifyJWT, PostController.getMyPosts);
 router.get("/get-posts", PostController.getPosts);
 router.get("/get-post/:id", PostController.getPost);
 router.post("/add-comment/:id", verifyJWT, PostController.addComment);

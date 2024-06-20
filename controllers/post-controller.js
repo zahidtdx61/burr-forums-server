@@ -457,6 +457,29 @@ const vote = async (req, res) => {
   }
 };
 
+const getMyPosts = async (req, res) => {
+  const { uid } = req.body;
+  try {
+    const user = await User.findOne({ uid: uid });
+    const posts = await Post.find({ userId: user._id });
+    
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Post found",
+      data: posts,
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Post not found",
+      data: {},
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   addPost,
   getPost,
@@ -470,4 +493,5 @@ module.exports = {
   deleteComment,
   getTags,
   vote,
+  getMyPosts,
 };
