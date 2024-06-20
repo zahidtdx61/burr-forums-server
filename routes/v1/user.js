@@ -37,6 +37,6 @@ router.get("/comments/:id", verifyJWT, PostController.getComments);
 router.post("/comment/report/:id", verifyJWT, PostController.reportComment);
 
 // tags
-router.get("/tags", verifyJWT, PostController.getTags);
+router.get("/tags", PostController.getTags);
 
 module.exports = router;
