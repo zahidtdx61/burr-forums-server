@@ -63,38 +63,62 @@ const getPost = async (req, res) => {
 };
 
 const getPosts = async (req, res) => {
-  const { search, sorted, page, size, status, id } = req.query;
-  console.log({ search, sorted, page, size, status, id });
+  const { search, sorted, page, size, tag, id } = req.query;
+  // console.log({ search, sorted, page, size, tag, id });
 
   try {
     const user = await User.findOne({ uid: id });
-    if (!user) {
-      return res.status(StatusCodes.NOT_FOUND).json({
-        success: false,
-        message: "User not found",
-        data: {},
-        error: {},
-      });
+    if (id) {
+      if (!user) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          success: false,
+          message: "User not found",
+          data: {},
+          error: {},
+        });
+      }
     }
 
     let query = {};
     if (search) {
       query = { title: { $regex: new RegExp(search, "i") } };
     }
-    if (status) {
-      query = { ...query, status };
+    if (tag) {
+      query = { ...query, tag };
     }
 
-    let postQuery = Post.find(query);
-    if (sorted) {
-      postQuery = postQuery.sort({ [sorted]: -1 });
+    let postQuery;
+    if (sorted && sorted === "vote") {
+      const pipeline = [
+        { $match: query },
+        {
+          $addFields: {
+            upvotes: { $ifNull: ["$upVotes", 0] },
+            downvotes: { $ifNull: ["$downVotes", 0] },
+            voteDifference: { 
+              $subtract: [
+                { $ifNull: ["$upVotes", 0] },
+                { $ifNull: ["$downVotes", 0] }
+              ]
+            },
+          },
+        },
+        { $sort: { voteDifference: -1 } },
+      ];
+
+      postQuery = Post.aggregate(pipeline);
+    } else {
+      postQuery = Post.find(query);
+      if (sorted) {
+        postQuery = postQuery.sort({ [sorted]: -1 });
+      }
     }
 
-    const limit = parseInt(size);
-    const skip = (parseInt(page) - 1) * limit;
-
-    // console.log({ limit, skip })
-    postQuery = postQuery.skip(skip).limit(limit);
+    if(size && page){
+      const limit = parseInt(size);
+      const skip = (parseInt(page) - 1) * limit;
+      postQuery = postQuery.skip(skip).limit(limit);
+    }
 
     const posts = await postQuery.exec();
 
@@ -113,6 +137,7 @@ const getPosts = async (req, res) => {
     });
   }
 };
+
 
 const deletePost = async (req, res) => {
   const { id } = req.params;
