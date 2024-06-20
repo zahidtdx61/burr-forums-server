@@ -140,12 +140,14 @@ const getPosts = async (req, res) => {
 
     let posts = await postQuery.exec();
 
-    posts = posts.map((post) => {
-      post = post.toObject();
-      post.user = post.userId;
-      delete post.userId;
-      return post;
-    });
+    if (sorted && sorted === "createdAt") {
+      posts = posts.map((post) => {
+        post = post.toObject();
+        post.user = post.userId;
+        delete post.userId;
+        return post;
+      });
+    }
 
     return res.status(StatusCodes.OK).json({
       success: true,
