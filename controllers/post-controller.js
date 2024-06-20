@@ -80,10 +80,10 @@ const getPosts = async (req, res) => {
     }
 
     let query = {};
-    if (search && (search !== 'null')) {
+    if (search && search !== "null") {
       query = { title: { $regex: new RegExp(search, "i") } };
     }
-    if (tag && (tag !== 'null')) {
+    if (tag && tag !== "null") {
       query = { ...query, tag };
     }
 
@@ -95,46 +95,57 @@ const getPosts = async (req, res) => {
           $addFields: {
             upvotes: { $ifNull: ["$upVotes", 0] },
             downvotes: { $ifNull: ["$downVotes", 0] },
-            voteDifference: { 
+            voteDifference: {
               $subtract: [
                 { $ifNull: ["$upVotes", 0] },
-                { $ifNull: ["$downVotes", 0] }
-              ]
+                { $ifNull: ["$downVotes", 0] },
+              ],
             },
           },
         },
         {
           $lookup: {
-            from: 'users',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'user'
-          }
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
         },
         {
           $unwind: {
-            path: '$user',
-            preserveNullAndEmptyArrays: true
-          }
+            path: "$user",
+            preserveNullAndEmptyArrays: true,
+          },
         },
         { $sort: { voteDifference: -1 } },
       ];
 
       postQuery = Post.aggregate(pipeline);
     } else {
-      postQuery = Post.find(query).populate("userId");
-      if (sorted && (sorted !== 'null')) {
+      postQuery = Post.find(query).populate({
+        path: "userId",
+        model: "User",
+        as: "user",
+      });
+      if (sorted && sorted !== "null") {
         postQuery = postQuery.sort({ [sorted]: -1 });
       }
     }
 
-    if(size && page && (size !== 'null') && (page !== 'null')){
+    if (size && page && size !== "null" && page !== "null") {
       const limit = parseInt(size);
       const skip = (parseInt(page) - 1) * limit;
       postQuery = postQuery.skip(skip).limit(limit);
     }
 
-    const posts = await postQuery.exec();
+    let posts = await postQuery.exec();
+
+    posts = posts.map((post) => {
+      post = post.toObject();
+      post.user = post.userId;
+      delete post.userId;
+      return post;
+    });
 
     return res.status(StatusCodes.OK).json({
       success: true,
@@ -151,7 +162,6 @@ const getPosts = async (req, res) => {
     });
   }
 };
-
 
 const deletePost = async (req, res) => {
   const { id } = req.params;
