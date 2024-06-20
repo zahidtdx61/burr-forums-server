@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const User = require("../models/user");
+const Announcement = require("../models/announcement");
 
 const createUser = async (req, res) => {
   const user = req.body;
@@ -94,6 +95,26 @@ const logout = async (req, res) => {
     });
 };
 
+const getAnnouncements = async (req, res) => {
+  try {
+    const announcements = await Announcement.find({});
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Announcements found",
+      data: announcements,
+      error: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Announcements not found",
+      data: {},
+      error: error.message,
+    });
+  }
+}
+
 const getRole = async (req, res) => {
   const { uid } = req.body;
   try {
@@ -129,4 +150,5 @@ module.exports = {
   getUser,
   getRole,
   logout,
+  getAnnouncements,
 };

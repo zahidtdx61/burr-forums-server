@@ -39,4 +39,7 @@ router.post("/comment/report/:id", verifyJWT, PostController.reportComment);
 // tags
 router.get("/tags", PostController.getTags);
 
+// announcements
+router.get("/announcements", UserController.getAnnouncements);
+
 module.exports = router;
