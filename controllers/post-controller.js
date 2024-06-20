@@ -80,10 +80,10 @@ const getPosts = async (req, res) => {
     }
 
     let query = {};
-    if (search) {
+    if (search && (search !== 'null')) {
       query = { title: { $regex: new RegExp(search, "i") } };
     }
-    if (tag) {
+    if (tag && (tag !== 'null')) {
       query = { ...query, tag };
     }
 
@@ -103,18 +103,32 @@ const getPosts = async (req, res) => {
             },
           },
         },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $unwind: {
+            path: '$user',
+            preserveNullAndEmptyArrays: true
+          }
+        },
         { $sort: { voteDifference: -1 } },
       ];
 
       postQuery = Post.aggregate(pipeline);
     } else {
-      postQuery = Post.find(query);
-      if (sorted) {
+      postQuery = Post.find(query).populate("userId");
+      if (sorted && (sorted !== 'null')) {
         postQuery = postQuery.sort({ [sorted]: -1 });
       }
     }
 
-    if(size && page){
+    if(size && page && (size !== 'null') && (page !== 'null')){
       const limit = parseInt(size);
       const skip = (parseInt(page) - 1) * limit;
       postQuery = postQuery.skip(skip).limit(limit);
