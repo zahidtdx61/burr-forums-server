@@ -8,6 +8,9 @@ Welcome to the backend service for [Buzz Forums](https://buzz-forums.vercel.app)
 
 You can visit our live site at [Buzz Forums Backend](https://buzz-forums-backend.vercel.app/).
 
+## Frontend Repo
+ - [Buzz Forums Frontend](https://github.com/zahidtdx61/buzz-forums-client)
+
 ## Features
 
 ### User Features
@@ -34,13 +37,13 @@ To run the backend server locally, follow these steps:
 1. Clone the repository:
 
 ```sh
-git clone https://github.com/programming-hero-web-course1/b9a12-server-side-zahidtdx61
+git clone https://github.com/zahidtdx61/burr-forums-server
 ```
 
 2. Navigate to the project directory:
 
 ```sh
-cd b9a12-server-side-zahidtdx61
+cd burr-forums-server
 ```
 
 3. Install dependencies:
