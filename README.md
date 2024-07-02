@@ -3,11 +3,8 @@
 Welcome to the backend service for [Buzz Forums](https://buzz-forums.vercel.app). This service handles all server-side operations, including user authentication, post management, comment moderation, and site statistics.
 
 ## Live Preview
-
-[![Website](https://img.shields.io/website?url=https%3A%2F%2Fbuzz-forums-backend.vercel.app%2F)](https://buzz-forums-backend.vercel.app/)
-
-You can visit our live site at [Buzz Forums Backend](https://buzz-forums-backend.vercel.app/).
-
+ You can visit our live site at [Buzz Forums Backend](https://buzz-forums-backend.vercel.app/).
+ 
 ## Frontend Repo
  - [Buzz Forums Frontend](https://github.com/zahidtdx61/buzz-forums-client)
 
